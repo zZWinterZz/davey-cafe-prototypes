@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Davy Lamp Café — The Antique</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=IM+Fell+English:ital@0;1&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper:    #F0E6CC;
+      --paper-2:  #E4D8B8;
+      --paper-3:  #D8C8A0;
+      --ink:      #1E0E04;
+      --ink-lt:   #3A2010;
+      --sepia:    #6B4018;
+      --gold:     #9B7820;
+      --gold-lt:  #C4A030;
+      --rust:     #8B3010;
+      --rust-lt:  #B04020;
+      --mid:      #7A5830;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'IM Fell English', serif;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    /* Aged paper texture overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 70px;
+      background: var(--ink);
+      border-bottom: 4px double var(--gold);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .nav-logo svg { width: 32px; height: auto; }
+    .nav-logo-text {}
+    .nav-logo-text .top { display: block; font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.7rem; letter-spacing: 0.12em; color: var(--gold-lt); }
+    .nav-logo-text .name { display: block; font-family: 'IM Fell English', serif; font-size: 1.1rem; color: var(--paper); line-height: 1.1; letter-spacing: 0.04em; }
+
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { color: var(--paper-2); text-decoration: none; font-family: 'IM Fell English', serif; font-size: 0.95rem; letter-spacing: 0.04em; transition: color .2s; }
+    .nav-links a:hover { color: var(--gold-lt); }
+
+    .nav-cta {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.9rem;
+      background: var(--rust);
+      color: var(--paper);
+      padding: 8px 20px;
+      text-decoration: none;
+      border: 1px solid var(--rust-lt);
+      letter-spacing: 0.06em;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--rust-lt); }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 70px;
+      min-height: 100vh;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-color: var(--paper-2);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='140'%3E%3Crect width='400' height='140' fill='%23C8A870'/%3E%3Crect x='3' y='4' width='188' height='58' rx='1' fill='%23B89060'/%3E%3Crect x='209' y='4' width='188' height='58' rx='1' fill='%23C09868'/%3E%3Crect x='3' y='70' width='90' height='58' rx='1' fill='%23B08858'/%3E%3Crect x='111' y='70' width='178' height='58' rx='1' fill='%23B89060'/%3E%3Crect x='307' y='70' width='90' height='58' rx='1' fill='%23B48C5C'/%3E%3C/svg%3E");
+      background-size: 400px 140px;
+    }
+
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 50% 40% at 50% 60%, rgba(155,120,32,0.35) 0%, transparent 65%),
+        linear-gradient(to bottom, rgba(30,14,4,0.55) 0%, rgba(30,14,4,0.3) 50%, rgba(30,14,4,0.65) 100%);
+    }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      padding: 80px 40px 100px;
+      max-width: 800px;
+    }
+
+    /* Decorative rule */
+    .ornament {
+      color: var(--gold-lt);
+      font-size: 1.4rem;
+      letter-spacing: 0.3em;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    .hero-lamp {
+      width: 80px;
+      margin: 0 auto 24px;
+      filter: drop-shadow(0 0 18px rgba(196,160,48,0.7));
+      animation: antique-glow 4s ease-in-out infinite;
+    }
+    @keyframes antique-glow {
+      0%, 100% { filter: drop-shadow(0 0 14px rgba(196,160,48,0.6)); opacity: 0.95; }
+      50%       { filter: drop-shadow(0 0 28px rgba(196,160,48,0.9)); opacity: 1; }
+    }
+
+    .hero-eyebrow {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--gold-lt);
+      letter-spacing: 0.18em;
+      margin-bottom: 16px;
+    }
+
+    .hero-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      font-weight: 700;
+      color: var(--paper);
+      line-height: 1.08;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+      margin-bottom: 8px;
+    }
+    .hero-h1 em { font-style: italic; color: var(--gold-lt); }
+
+    .hero-rule {
+      width: 160px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-lt), transparent);
+      margin: 20px auto;
+    }
+
+    .hero-sub {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--paper-2);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      font-family: 'IM Fell English', serif;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      background: var(--rust);
+      color: var(--paper);
+      padding: 14px 32px;
+      text-decoration: none;
+      border: 1px solid var(--rust-lt);
+      transition: background .2s;
+    }
+    .btn-primary:hover { background: var(--rust-lt); }
+    .btn-ghost {
+      font-family: 'IM Fell English', serif;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      background: transparent;
+      color: var(--paper);
+      padding: 14px 32px;
+      text-decoration: none;
+      border: 1px solid rgba(240,230,204,0.45);
+      transition: border-color .2s;
+    }
+    .btn-ghost:hover { border-color: var(--paper); }
+
+    .hero-notice {
+      margin-top: 36px;
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--paper-3);
+      letter-spacing: 0.08em;
+    }
+    .hero-notice span { margin: 0 10px; }
+
+    /* ── MURAL ── */
+    .mural-banner {
+      background: var(--paper-3);
+      border-top: 3px double var(--gold);
+      border-bottom: 3px double var(--gold);
+      padding: 44px 40px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mural-inner {
+      max-width: 860px; width: 100%;
+      border: 1px dashed var(--sepia);
+      padding: 36px;
+      text-align: center;
+    }
+    .mural-inner .ornament { margin-bottom: 10px; }
+    .mural-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--rust);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .mural-note { font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.9rem; color: var(--sepia); }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 80px 48px; position: relative; }
+    .section-tag {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      letter-spacing: 0.2em;
+      color: var(--rust);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-rule {
+      width: 60px; height: 2px;
+      background: var(--gold);
+      margin: 12px 0 20px;
+    }
+    .section-h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.12;
+      margin-bottom: 16px;
+    }
+    .section-lead {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--sepia);
+      line-height: 1.75;
+      max-width: 520px;
+      margin-bottom: 48px;
+    }
+
+    /* ── POPULAR ── */
+    .popular { background: var(--paper); }
+    .popular-inner { max-width: 1100px; margin: 0 auto; }
+    .popular-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+    }
+    .dish-card {
+      border: 1px solid var(--paper-3);
+      border-top: 3px solid var(--rust);
+      background: var(--paper-2);
+      padding: 28px;
+      position: relative;
+    }
+    .dish-card::before {
+      content: '✦';
+      position: absolute; top: 10px; right: 14px;
+      color: var(--gold); font-size: 0.8rem; opacity: 0.6;
+    }
+    .dish-emoji { font-size: 2.2rem; margin-bottom: 14px; }
+    .dish-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .dish-desc {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--sepia);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+    .dish-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--paper-3); padding-top: 14px; }
+    .dish-price { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--rust); font-weight: 700; }
+    .dish-add {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      color: var(--rust);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rust);
+      padding-bottom: 1px;
+      transition: color .2s;
+    }
+    .dish-add:hover { color: var(--rust-lt); }
+
+    /* ── ABOUT ── */
+    .about { background: var(--ink); }
+    .about-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+    }
+    .about .section-tag { color: var(--gold-lt); }
+    .about .section-h2 { color: var(--paper); }
+    .about .section-lead { color: var(--paper-3); max-width: 100%; margin-bottom: 32px; }
+    .about .section-rule { background: var(--rust); }
+
+    .about-blockquote {
+      border-left: 3px solid var(--gold);
+      padding: 16px 20px;
+      margin-top: 8px;
+    }
+    .about-blockquote p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--gold-lt);
+      line-height: 1.6;
+    }
+    .about-blockquote cite {
+      display: block;
+      font-family: 'IM Fell English', serif;
+      font-size: 0.82rem;
+      color: var(--paper-3);
+      margin-top: 8px;
+      letter-spacing: 0.1em;
+    }
+
+    .about-right { display: flex; flex-direction: column; gap: 20px; }
+    .about-item {
+      border: 1px solid rgba(240,230,204,0.1);
+      padding: 22px;
+      background: rgba(240,230,204,0.04);
+    }
+    .about-item h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      color: var(--gold-lt);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .about-item p {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.95rem;
+      color: var(--paper-3);
+      line-height: 1.65;
+    }
+
+    /* ── DELIVERY ── */
+    .delivery { background: var(--paper-2); }
+    .delivery-inner { max-width: 1100px; margin: 0 auto; }
+    .delivery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .del-card {
+      background: var(--paper);
+      border: 1px solid var(--paper-3);
+      border-top: 2px solid var(--rust);
+      padding: 26px 22px;
+      text-align: center;
+    }
+    .del-icon { font-size: 2rem; margin-bottom: 12px; }
+    .del-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 6px; letter-spacing: 0.04em; }
+    .del-value { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--rust); font-weight: 700; margin-bottom: 4px; }
+    .del-note { font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.88rem; color: var(--sepia); line-height: 1.5; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink-lt);
+      border-top: 4px double var(--gold);
+      padding: 52px 48px 28px;
+      color: var(--paper-3);
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid rgba(155,120,32,0.2);
+    }
+    .footer-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--gold-lt);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .footer-brand p { font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.9rem; line-height: 1.85; color: var(--paper-3); }
+    .footer-col h4 { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-family: 'IM Fell English', serif; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .footer-col li, .footer-col a { font-family: 'IM Fell English', serif; font-size: 0.95rem; color: var(--paper-3); text-decoration: none; }
+    .footer-col a:hover { color: var(--gold-lt); }
+    .footer-bottom {
+      max-width: 1100px; margin: 24px auto 0;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+      font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.82rem; color: var(--sepia);
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .about-inner { grid-template-columns: 1fr; gap: 40px; }
+      .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+      section { padding: 60px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../" class="nav-logo">
+    <svg viewBox="0 0 100 168" xmlns="http://www.w3.org/2000/svg" style="color:#C4A030">
+      <defs><clipPath id="dlg-d1"><polygon points="19,36 81,36 68,108 32,108"/></clipPath></defs>
+      <circle cx="50" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="4"/>
+      <rect x="47" y="20" width="6" height="8" fill="currentColor"/>
+      <rect x="15" y="27" width="70" height="8" rx="2" fill="currentColor"/>
+      <polygon points="19,35 26,35 31,108 24,108" fill="currentColor"/>
+      <polygon points="81,35 74,35 69,108 76,108" fill="currentColor"/>
+      <rect x="19" y="35" width="62" height="4" fill="currentColor"/>
+      <rect x="24" y="104" width="52" height="5" fill="currentColor"/>
+      <g clip-path="url(#dlg-d1)" stroke="currentColor" stroke-width="1.8" fill="none">
+        <line x1="-8" y1="35" x2="38" y2="118"/><line x1="5" y1="35" x2="51" y2="118"/>
+        <line x1="18" y1="35" x2="64" y2="118"/><line x1="31" y1="35" x2="77" y2="118"/>
+        <line x1="44" y1="35" x2="90" y2="118"/><line x1="57" y1="35" x2="103" y2="118"/>
+        <line x1="70" y1="35" x2="116" y2="118"/><line x1="83" y1="35" x2="129" y2="118"/>
+        <line x1="108" y1="35" x2="62" y2="118"/><line x1="95" y1="35" x2="49" y2="118"/>
+        <line x1="82" y1="35" x2="36" y2="118"/><line x1="69" y1="35" x2="23" y2="118"/>
+        <line x1="56" y1="35" x2="10" y2="118"/><line x1="43" y1="35" x2="-3" y2="118"/>
+        <line x1="30" y1="35" x2="-16" y2="118"/><line x1="17" y1="35" x2="-29" y2="118"/>
+      </g>
+      <rect x="27" y="109" width="46" height="8" rx="1" fill="currentColor"/>
+      <rect x="27" y="117" width="7" height="35" fill="currentColor"/>
+      <rect x="66" y="117" width="7" height="35" fill="currentColor"/>
+      <rect x="27" y="117" width="46" height="6" fill="currentColor"/>
+      <rect x="27" y="146" width="46" height="6" fill="currentColor"/>
+      <rect x="45" y="123" width="10" height="22" rx="1" fill="currentColor"/>
+      <ellipse cx="50" cy="120" rx="5" ry="7" fill="#F5C518"/>
+      <ellipse cx="50" cy="122" rx="2.5" ry="4" fill="#FFF0A0"/>
+      <rect x="23" y="152" width="54" height="7" rx="1" fill="currentColor"/>
+      <rect x="19" y="158" width="62" height="10" rx="2" fill="currentColor"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span class="top">Est. Barnsley</span>
+      <span class="name">The Davy Lamp</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../">← All Styles</a></li>
+    <li><a href="#">Menu</a></li>
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#delivery">Delivery</a></li>
+  </ul>
+  <a href="../menu.html" class="nav-cta">Order Now</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-inner">
+    <div class="ornament">— ✦ —</div>
+    <svg class="hero-lamp" viewBox="0 0 100 168" xmlns="http://www.w3.org/2000/svg" style="color:#C4A030">
+      <defs><clipPath id="dlg-d2"><polygon points="19,36 81,36 68,108 32,108"/></clipPath></defs>
+      <circle cx="50" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="4"/>
+      <rect x="47" y="20" width="6" height="8" fill="currentColor"/>
+      <rect x="15" y="27" width="70" height="8" rx="2" fill="currentColor"/>
+      <polygon points="19,35 26,35 31,108 24,108" fill="currentColor"/>
+      <polygon points="81,35 74,35 69,108 76,108" fill="currentColor"/>
+      <rect x="19" y="35" width="62" height="4" fill="currentColor"/>
+      <rect x="24" y="104" width="52" height="5" fill="currentColor"/>
+      <g clip-path="url(#dlg-d2)" stroke="currentColor" stroke-width="1.8" fill="none">
+        <line x1="-8" y1="35" x2="38" y2="118"/><line x1="5" y1="35" x2="51" y2="118"/>
+        <line x1="18" y1="35" x2="64" y2="118"/><line x1="31" y1="35" x2="77" y2="118"/>
+        <line x1="44" y1="35" x2="90" y2="118"/><line x1="57" y1="35" x2="103" y2="118"/>
+        <line x1="70" y1="35" x2="116" y2="118"/><line x1="83" y1="35" x2="129" y2="118"/>
+        <line x1="108" y1="35" x2="62" y2="118"/><line x1="95" y1="35" x2="49" y2="118"/>
+        <line x1="82" y1="35" x2="36" y2="118"/><line x1="69" y1="35" x2="23" y2="118"/>
+        <line x1="56" y1="35" x2="10" y2="118"/><line x1="43" y1="35" x2="-3" y2="118"/>
+        <line x1="30" y1="35" x2="-16" y2="118"/><line x1="17" y1="35" x2="-29" y2="118"/>
+      </g>
+      <rect x="27" y="109" width="46" height="8" rx="1" fill="currentColor"/>
+      <rect x="27" y="117" width="7" height="35" fill="currentColor"/>
+      <rect x="66" y="117" width="7" height="35" fill="currentColor"/>
+      <rect x="27" y="117" width="46" height="6" fill="currentColor"/>
+      <rect x="27" y="146" width="46" height="6" fill="currentColor"/>
+      <rect x="45" y="123" width="10" height="22" rx="1" fill="currentColor"/>
+      <ellipse cx="50" cy="120" rx="5" ry="7" fill="#F5C518"/>
+      <ellipse cx="50" cy="122" rx="2.5" ry="4" fill="#FFF0A0"/>
+      <rect x="23" y="152" width="54" height="7" rx="1" fill="currentColor"/>
+      <rect x="19" y="158" width="62" height="10" rx="2" fill="currentColor"/>
+    </svg>
+    <p class="hero-eyebrow">Unit 1, 424 Carlton Road, Barnsley</p>
+    <h1 class="hero-h1">Good Food,<br><em>Honestly Made</em></h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">Proper Yorkshire fare, cooked fresh each morning and delivered straight to your door. Named after the lamp that lit the way.</p>
+    <div class="hero-actions">
+      <a href="../menu.html" class="btn-primary">Browse the Menu</a>
+      <a href="#popular" class="btn-ghost">What's Popular</a>
+    </div>
+    <p class="hero-notice">
+      <span>Open Mon–Sun</span>·<span>8am–4pm</span>·<span>Delivery £4.59</span>·<span>No Minimum Order</span>
+    </p>
+  </div>
+</section>
+
+<div class="mural-banner">
+  <div class="mural-inner">
+    <div class="ornament">— 📷 —</div>
+    <p class="mural-label">Your Wall Mural — Full Width Here</p>
+    <p class="mural-note">The aged brick and sepia tones of this style would sit beautifully alongside the café's real mural photograph.</p>
+  </div>
+</div>
+
+<section class="popular" id="popular">
+  <div class="popular-inner">
+    <p class="section-tag">From the Kitchen</p>
+    <div class="section-rule"></div>
+    <h2 class="section-h2">Customer Favourites</h2>
+    <p class="section-lead">Cooked fresh each morning — honest food done properly, the way it's always been at The Davy Lamp.</p>
+    <div class="popular-grid">
+      <div class="dish-card">
+        <div class="dish-emoji">🍳</div>
+        <div class="dish-name">Large Breakfast</div>
+        <p class="dish-desc">Bacon, sausage, eggs, black pudding, baked beans, hash brown and toast. A proper Barnsley send-off.</p>
+        <div class="dish-footer">
+          <span class="dish-price">£12.15</span>
+          <a href="../menu.html" class="dish-add">Add to order →</a>
+        </div>
+      </div>
+      <div class="dish-card">
+        <div class="dish-emoji">🥧</div>
+        <div class="dish-name">Steak &amp; Ale Pie</div>
+        <p class="dish-desc">Slow-cooked tender steak in a rich Yorkshire ale gravy, baked in a proper shortcrust. Served with mash and peas.</p>
+        <div class="dish-footer">
+          <span class="dish-price">£11.90</span>
+          <a href="../menu.html" class="dish-add">Add to order →</a>
+        </div>
+      </div>
+      <div class="dish-card">
+        <div class="dish-emoji">🫓</div>
+        <div class="dish-name">Filled Yorkshire Pudding</div>
+        <p class="dish-desc">A giant baked Yorkshire pudding with roast beef, roast potatoes, veg and rich gravy. A Yorkshire classic.</p>
+        <div class="dish-footer">
+          <span class="dish-price">£9.50</span>
+          <a href="../menu.html" class="dish-add">Add to order →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-inner">
+    <div>
+      <p class="section-tag">Our Heritage</p>
+      <div class="section-rule"></div>
+      <h2 class="section-h2">Lit by Tradition,<br>Driven by Flavour</h2>
+      <p class="section-lead">Named after Sir Humphry Davy's miner's safety lamp — the amber light that guided Yorkshire's pit workers safely through the dark.</p>
+      <div class="about-blockquote">
+        <p>"Like the lamp itself, we're here to be a warm, reliable light in the community — honest food, fair portions, and a friendly face."</p>
+        <cite>— The Davy Lamp Café, Carlton Road</cite>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="about-item">
+        <h3>The Name</h3>
+        <p>The Davy lamp was invented in 1815 by Sir Humphry Davy. Its steel mesh cage prevented mine gas from igniting — and its warm amber glow guided miners safely. We carry that spirit into every meal we serve.</p>
+      </div>
+      <div class="about-item">
+        <h3>The Kitchen</h3>
+        <p>Everything is cooked fresh to order. No heat lamps, no shortcuts. If your breakfast takes a few extra minutes, it's because it's being done right.</p>
+      </div>
+      <div class="about-item">
+        <h3>The Community</h3>
+        <p>Carlton Road, Barnsley. Working-class heart of South Yorkshire since the colliery days. We're proud to serve the same community — generous, honest, and always a proper portion.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="delivery" id="delivery">
+  <div class="delivery-inner">
+    <p class="section-tag">Getting It To You</p>
+    <div class="section-rule"></div>
+    <h2 class="section-h2" style="margin-bottom:48px">Delivery, Straight from Our Kitchen</h2>
+    <div class="delivery-grid">
+      <div class="del-card">
+        <div class="del-icon">🚫</div>
+        <div class="del-title">Minimum Order</div>
+        <div class="del-value">None</div>
+        <div class="del-note">Order whatever you fancy.</div>
+      </div>
+      <div class="del-card">
+        <div class="del-icon">🚴</div>
+        <div class="del-title">Delivery Fee</div>
+        <div class="del-value">£4.59</div>
+        <div class="del-note">Flat rate to your door.</div>
+      </div>
+      <div class="del-card">
+        <div class="del-icon">💳</div>
+        <div class="del-title">Service Fee</div>
+        <div class="del-value">£0.99–£2.99</div>
+        <div class="del-note">Platform charge at checkout.</div>
+      </div>
+      <div class="del-card">
+        <div class="del-icon">🕐</div>
+        <div class="del-title">Hours</div>
+        <div class="del-value">8am–4pm</div>
+        <div class="del-note">Seven days a week.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-name">The Davy Lamp Café</div>
+      <p>Unit 1, 424 Carlton Road<br>Barnsley, S71 4HX<br><br>01226 726362<br>thedavylamp@gmail.com</p>
+    </div>
+    <div class="footer-col">
+      <h4>Menu</h4>
+      <ul>
+        <li><a href="../menu.html">Breakfasts</a></li>
+        <li><a href="../menu.html">Main Meals</a></li>
+        <li><a href="../menu.html">Burgers</a></li>
+        <li><a href="../menu.html">Sweet Stuff</a></li>
+        <li><a href="../menu.html">Drinks</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Info</h4>
+      <ul>
+        <li>Mon–Sun 8am–4pm</li>
+        <li>No minimum order</li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Just Eat</a></li>
+        <li><a href="../">← All Styles</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 The Davy Lamp Café, Barnsley</span>
+    <span>Style D — "The Antique" prototype</span>
+  </div>
+</footer>
+
+</body>
+</html>
