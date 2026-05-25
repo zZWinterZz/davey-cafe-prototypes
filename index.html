@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Davy Lamp — Barnsley's Favourite Café</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --coal:      #060302;
+      --dark:      #0E0704;
+      --gold:      #C8820A;
+      --amber:     #E8A820;
+      --glow:      #FFD060;
+      --cream:     #F5E6CC;
+      --white:     #FFF8F0;
+      --muted:     #9A7A5A;
+      --muted-lt:  #C4A07A;
+      --card:      rgba(14,7,4,0.94);
+      --border:    rgba(200,130,10,0.22);
+
+      /* Brick wall colours — intentionally warm & visible */
+      --brick-1: %23702010;
+      --brick-2: %23581808;
+      --brick-3: %236A1E0C;
+      --mortar:  %231A0802;
+    }
+
+    body { font-family: 'Lato', sans-serif; background: var(--dark); color: var(--cream); line-height: 1.6; }
+
+    /* ═══ NAV ═══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      background: rgba(6,3,2,0.97); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
+    .nav-logo svg { height: 42px; }
+    .nav-logo-text .name { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; color:var(--amber); line-height:1; display:block; }
+    .nav-logo-text .sub  { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); display:block; margin-top:2px; }
+    .nav-links { display:flex; gap:2rem; list-style:none; align-items:center; }
+    .nav-links a { text-decoration:none; color:var(--cream); font-size:0.88rem; letter-spacing:0.04em; transition:color 0.2s; }
+    .nav-links a:hover { color:var(--amber); }
+    .nav-cta { background:var(--gold); color:var(--coal)!important; font-weight:700!important; padding:0.45rem 1.2rem; border-radius:3px; transition:background 0.2s,transform 0.15s!important; }
+    .nav-cta:hover { background:var(--amber)!important; transform:translateY(-1px); }
+    @media(max-width:768px) { .nav-links { display:none; } }
+
+    /* ═══ HERO — BRICK WALL ═══ */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; overflow: hidden;
+      /*
+        Brick wall pattern — the layered SVG creates alternating rows of
+        warm terracotta bricks with dark mortar lines between them.
+        Radial amber glow simulates the Davy Lamp light hitting the wall.
+      */
+      background-color: #1A0803;
+      background-image:
+        /* Amber lamp-glow at lower-centre, as if the lamp is mounted here */
+        radial-gradient(ellipse 60% 50% at 50% 72%, rgba(220,140,10,0.28) 0%, rgba(180,90,5,0.12) 40%, transparent 70%),
+        /* Vignette — darkens edges so the wall recedes into shadow */
+        radial-gradient(ellipse 120% 100% at 50% 50%, transparent 30%, rgba(0,0,0,0.75) 100%),
+        /* Overall dark wash so text stays legible */
+        linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.6) 100%),
+        /* The brick wall tile */
+        url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='140'><rect width='400' height='140' fill='%231A0802'/><rect x='3' y='4' width='188' height='58' rx='1' fill='%23702010'/><rect x='209' y='4' width='188' height='58' rx='1' fill='%23601808'/><rect x='3' y='70' width='90' height='58' rx='1' fill='%235C1A07'/><rect x='111' y='70' width='178' height='58' rx='1' fill='%23701E0C'/><rect x='307' y='70' width='90' height='58' rx='1' fill='%23641C08'/></svg>");
+      background-size: auto, auto, auto, 400px 140px;
+    }
+
+    .hero-content { position:relative; z-index:2; padding:8rem 2rem 4rem; max-width:860px; }
+
+    /* ── The lamp — rendered as if mounted on the wall ── */
+    .hero-lamp-wrap {
+      position: relative; width: 110px; margin: 0 auto 2.5rem;
+    }
+    /* glow halo behind the lamp */
+    .hero-lamp-wrap::before {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(255,190,30,0.35) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: halo 4s ease-in-out infinite;
+    }
+    @keyframes halo {
+      0%,100% { opacity:0.7; transform:translate(-50%,-50%) scale(1); }
+      45%      { opacity:1;   transform:translate(-50%,-50%) scale(1.12); }
+      50%      { opacity:0.6; transform:translate(-50%,-50%) scale(0.98); }
+      55%      { opacity:1;   transform:translate(-50%,-50%) scale(1.10); }
+    }
+    .hero-lamp-wrap svg {
+      position: relative; z-index: 1;
+      filter: drop-shadow(0 0 18px rgba(255,185,30,0.7));
+      animation: flicker 4s ease-in-out infinite;
+    }
+    @keyframes flicker {
+      0%,100% { filter:drop-shadow(0 0 18px rgba(255,185,30,0.7)); }
+      45%      { filter:drop-shadow(0 0 30px rgba(255,185,30,0.9)); }
+      50%      { filter:drop-shadow(0 0 12px rgba(255,185,30,0.5)); }
+      55%      { filter:drop-shadow(0 0 28px rgba(255,185,30,0.85)); }
+    }
+
+    .hero-eyebrow {
+      display:inline-block; font-size:0.72rem; letter-spacing:0.28em; text-transform:uppercase;
+      color:var(--amber); border:1px solid rgba(232,168,32,0.45);
+      padding:0.3rem 1.1rem; border-radius:2px; margin-bottom:1.5rem;
+    }
+    .hero h1 {
+      font-family:'Playfair Display',serif; font-size:clamp(2.8rem,8vw,5.4rem);
+      font-weight:900; color:var(--white); line-height:1.06; margin-bottom:1.25rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    }
+    .hero h1 em { color:var(--amber); font-style:italic; }
+    .hero p {
+      font-size:1.1rem; color:var(--muted-lt); max-width:520px;
+      margin:0 auto 2.5rem; font-weight:300; line-height:1.8;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    }
+    .hero-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+    .btn-primary {
+      background:var(--gold); color:var(--coal); font-weight:700; font-size:0.95rem;
+      letter-spacing:0.06em; padding:0.85rem 2.4rem; border:none; border-radius:3px;
+      cursor:pointer; text-decoration:none; display:inline-block;
+      transition:background 0.2s,transform 0.15s,box-shadow 0.2s; font-family:'Lato',sans-serif;
+    }
+    .btn-primary:hover { background:var(--amber); transform:translateY(-2px); box-shadow:0 8px 28px rgba(200,130,10,0.4); }
+    .btn-outline {
+      background:transparent; color:var(--cream); font-weight:700; font-size:0.95rem;
+      letter-spacing:0.06em; padding:0.85rem 2.4rem;
+      border:2px solid rgba(245,232,204,0.35); border-radius:3px;
+      cursor:pointer; text-decoration:none; display:inline-block; transition:all 0.2s;
+    }
+    .btn-outline:hover { border-color:var(--amber); color:var(--amber); }
+
+    /* Scroll indicator */
+    .hero-scroll {
+      position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:0.4rem;
+      color:var(--muted); font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase;
+    }
+    .scroll-bar { width:1px; height:44px; background:linear-gradient(to bottom, var(--gold), transparent); animation:sb 2s ease-in-out infinite; }
+    @keyframes sb { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    /* ═══ STRIP ═══ */
+    .strip {
+      background:var(--gold); padding:1.1rem 2rem;
+      display:flex; justify-content:center; gap:3rem; flex-wrap:wrap;
+    }
+    .strip-item { display:flex; align-items:center; gap:0.6rem; color:var(--coal); }
+    .strip-icon { font-size:1.3rem; }
+    .strip-label { font-weight:700; font-size:0.85rem; letter-spacing:0.06em; text-transform:uppercase; }
+
+    /* ═══ MURAL BANNER ═══ */
+    /*
+      This section is a placeholder for the actual wall mural photograph from the Facebook header.
+      In production, replace the background-color with background-image: url('your-mural-photo.jpg')
+    */
+    .mural-banner {
+      position: relative; height: 420px; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      background-color: #3A1008;
+      background-image:
+        url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='140'><rect width='400' height='140' fill='%231A0802'/><rect x='3' y='4' width='188' height='58' rx='1' fill='%23702010'/><rect x='209' y='4' width='188' height='58' rx='1' fill='%23601808'/><rect x='3' y='70' width='90' height='58' rx='1' fill='%235C1A07'/><rect x='111' y='70' width='178' height='58' rx='1' fill='%23701E0C'/><rect x='307' y='70' width='90' height='58' rx='1' fill='%23641C08'/></svg>");
+      background-size: 400px 140px;
+    }
+    /* Warm lamp-light pools across the wall */
+    .mural-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 40% 60% at 25% 50%, rgba(220,140,10,0.22) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 60% at 75% 50%, rgba(200,120,8,0.18) 0%, transparent 65%),
+        linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.5) 100%);
+    }
+    .mural-content {
+      position: relative; z-index: 1; text-align: center;
+      padding: 2rem;
+    }
+    .mural-placeholder-label {
+      display: inline-block;
+      background: rgba(200,130,10,0.15); border: 1px dashed rgba(200,130,10,0.5);
+      color: var(--amber); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 0.4rem 1rem; border-radius: 2px; margin-bottom: 1.5rem;
+    }
+    .mural-quote {
+      font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 4vw, 2.4rem);
+      font-style: italic; color: var(--white); line-height: 1.3;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+      max-width: 700px;
+    }
+    .mural-quote em { color: var(--amber); }
+    .mural-attr { margin-top: 1rem; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.08em; }
+
+    /* ═══ SECTIONS ═══ */
+    .sec { padding:5.5rem 2rem; }
+    .inner { max-width:1100px; margin:0 auto; }
+    .eyebrow { font-size:0.7rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--amber); }
+    .rule { width:52px; height:3px; background:linear-gradient(to right,var(--gold),transparent); margin:0.75rem 0 1rem; }
+    .sec-title { font-family:'Playfair Display',serif; font-size:clamp(1.9rem,4vw,2.9rem); font-weight:700; color:var(--white); margin-bottom:0.9rem; }
+    .sec-sub { color:var(--muted-lt); font-weight:300; font-size:1.05rem; max-width:520px; line-height:1.75; }
+
+    /* ═══ POPULAR ITEMS ═══ */
+    .popular { background: var(--dark); }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; margin-top:3rem; }
+    .card {
+      background:var(--card); border:1px solid var(--border); border-radius:6px;
+      overflow:hidden; transition:transform 0.2s,box-shadow 0.2s;
+    }
+    .card:hover { transform:translateY(-5px); box-shadow:0 16px 44px rgba(200,130,10,0.15); }
+    .card-img {
+      height:180px; display:flex; align-items:center; justify-content:center; font-size:4.5rem;
+      background:linear-gradient(135deg,#2A0C04 0%,#5A2008 100%); position:relative;
+    }
+    .card-img::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,transparent 50%,var(--card)); }
+    .card-body { padding:1.3rem; }
+    .card-name { font-family:'Playfair Display',serif; font-size:1.18rem; color:var(--white); margin-bottom:0.4rem; }
+    .card-desc { color:var(--muted); font-size:0.86rem; line-height:1.55; margin-bottom:1rem; }
+    .card-foot { display:flex; align-items:center; justify-content:space-between; }
+    .price { font-family:'Playfair Display',serif; font-size:1.45rem; color:var(--amber); font-weight:700; }
+    .btn-add {
+      background:var(--gold); color:var(--coal); border:none; padding:0.45rem 1.2rem;
+      border-radius:3px; font-weight:700; font-size:0.82rem; cursor:pointer;
+      transition:background 0.2s,transform 0.15s; font-family:'Lato',sans-serif; text-decoration:none;
+    }
+    .btn-add:hover { background:var(--amber); transform:translateY(-1px); }
+    .sec-cta { text-align:center; margin-top:3rem; }
+
+    /* ═══ ABOUT — brick wall section ═══ */
+    .about {
+      background-color: #160804;
+      background-image:
+        radial-gradient(ellipse at 15% 50%, rgba(200,120,10,0.12) 0%, transparent 55%),
+        url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='140'><rect width='400' height='140' fill='%231A0802'/><rect x='3' y='4' width='188' height='58' rx='1' fill='%23702010'/><rect x='209' y='4' width='188' height='58' rx='1' fill='%23601808'/><rect x='3' y='70' width='90' height='58' rx='1' fill='%235C1A07'/><rect x='111' y='70' width='178' height='58' rx='1' fill='%23701E0C'/><rect x='307' y='70' width='90' height='58' rx='1' fill='%23641C08'/></svg>");
+      background-size: auto, 400px 140px;
+    }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+    @media(max-width:820px) { .about-grid { grid-template-columns:1fr; gap:3rem; } }
+    .about-text p { color:var(--muted-lt); font-weight:300; line-height:1.85; margin-bottom:1rem; }
+    .about-text strong { color:var(--amber); font-weight:700; }
+    .about-stats { display:flex; gap:2.5rem; flex-wrap:wrap; margin-top:2rem; }
+    .stat-num { font-family:'Playfair Display',serif; font-size:2.1rem; color:var(--amber); font-weight:700; line-height:1; }
+    .stat-lbl { font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-top:0.25rem; }
+    .lamp-display { display:flex; justify-content:center; }
+    .lamp-display svg { width:160px; filter:drop-shadow(0 0 44px rgba(255,160,20,0.45)); animation:flicker 4.5s ease-in-out infinite; }
+
+    /* ═══ DELIVERY ═══ */
+    .delivery { background:var(--coal); }
+    .coal { background: #060302; }
+    .info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.25rem; margin-top:3rem; }
+    .info-card { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:1.75rem; }
+    .info-icon { font-size:2rem; margin-bottom:0.9rem; display:block; }
+    .info-card h3 { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--white); margin-bottom:0.5rem; }
+    .info-card p { color:var(--muted); font-size:0.88rem; line-height:1.7; }
+    .hi { color:var(--amber); font-weight:700; }
+
+    /* ═══ FOOTER ═══ */
+    footer { background:var(--coal); border-top:1px solid var(--border); padding:3.5rem 2rem 1.5rem; }
+    .footer-inner { max-width:1100px; margin:0 auto; }
+    .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; margin-bottom:3rem; }
+    @media(max-width:768px) { .footer-grid { grid-template-columns:1fr; gap:2rem; } }
+    .footer-brand-name { font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--amber); margin-bottom:0.75rem; }
+    .footer-brand p { color:var(--muted); font-size:0.86rem; line-height:1.75; }
+    .footer-col h4 { font-size:0.7rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:0.9rem; }
+    .footer-col p, .footer-col address { color:var(--muted); font-size:0.86rem; line-height:2; font-style:normal; }
+    .footer-bottom { border-top:1px solid var(--border); padding-top:1.5rem; display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:0.78rem; flex-wrap:wrap; gap:0.75rem; }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <svg viewBox="0 0 80 132" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="9" r="6" fill="none" stroke="#E8A820" stroke-width="3.5"/>
+      <rect x="37" y="14" width="6" height="10" rx="2" fill="#9B7010"/>
+      <polygon points="30,24 50,24 46,37 34,37" fill="#B8841A"/>
+      <rect x="26" y="36" width="28" height="7" rx="3.5" fill="#C8920A"/>
+      <rect x="24" y="43" width="32" height="52" rx="3" fill="#FF7A00" opacity="0.22"/>
+      <rect x="24" y="43" width="32" height="52" rx="3" fill="none" stroke="#B8841A" stroke-width="2"/>
+      <line x1="24" y1="54" x2="56" y2="54" stroke="#B8841A" stroke-width="0.9"/>
+      <line x1="24" y1="65" x2="56" y2="65" stroke="#B8841A" stroke-width="0.9"/>
+      <line x1="24" y1="76" x2="56" y2="76" stroke="#B8841A" stroke-width="0.9"/>
+      <line x1="24" y1="87" x2="56" y2="87" stroke="#B8841A" stroke-width="0.9"/>
+      <line x1="32" y1="43" x2="32" y2="95" stroke="#B8841A" stroke-width="0.9"/>
+      <line x1="40" y1="43" x2="40" y2="95" stroke="#B8841A" stroke-width="0.9"/>
+      <line x1="48" y1="43" x2="48" y2="95" stroke="#B8841A" stroke-width="0.9"/>
+      <path d="M40,91 C34,79 31,67 40,53 C49,67 46,79 40,91Z" fill="#FF8C00" opacity="0.85"/>
+      <path d="M40,86 C37,77 35,68 40,58 C45,68 43,77 40,86Z" fill="#FFD060"/>
+      <path d="M40,79 C38,73 37,67 40,63 C43,67 42,73 40,79Z" fill="#FFEE99"/>
+      <rect x="26" y="94" width="28" height="7" rx="3.5" fill="#C8920A"/>
+      <path d="M20,101 L60,101 L56,117 L24,117Z" fill="#9B7010"/>
+      <rect x="18" y="115" width="44" height="9" rx="4.5" fill="#C8920A"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span class="name">The Davy Lamp</span>
+      <span class="sub">Barnsley · Est. 2019</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#delivery">Delivery</a></li>
+    <li><a href="menu.html" class="nav-cta">Order Now</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO — Brick wall with lamp glow ══ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-lamp-wrap">
+      <svg viewBox="0 0 80 132" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="9" r="6" fill="none" stroke="#E8A820" stroke-width="3.5"/>
+        <rect x="37" y="14" width="6" height="10" rx="2" fill="#9B7010"/>
+        <polygon points="30,24 50,24 46,37 34,37" fill="#B8841A"/>
+        <rect x="26" y="36" width="28" height="7" rx="3.5" fill="#C8920A"/>
+        <rect x="24" y="43" width="32" height="52" rx="3" fill="#FF7A00" opacity="0.22"/>
+        <rect x="24" y="43" width="32" height="52" rx="3" fill="none" stroke="#B8841A" stroke-width="2"/>
+        <line x1="24" y1="54" x2="56" y2="54" stroke="#B8841A" stroke-width="0.9"/>
+        <line x1="24" y1="65" x2="56" y2="65" stroke="#B8841A" stroke-width="0.9"/>
+        <line x1="24" y1="76" x2="56" y2="76" stroke="#B8841A" stroke-width="0.9"/>
+        <line x1="24" y1="87" x2="56" y2="87" stroke="#B8841A" stroke-width="0.9"/>
+        <line x1="32" y1="43" x2="32" y2="95" stroke="#B8841A" stroke-width="0.9"/>
+        <line x1="40" y1="43" x2="40" y2="95" stroke="#B8841A" stroke-width="0.9"/>
+        <line x1="48" y1="43" x2="48" y2="95" stroke="#B8841A" stroke-width="0.9"/>
+        <ellipse cx="40" cy="72" rx="13" ry="20" fill="#FF8C00" opacity="0.28"/>
+        <path d="M40,91 C34,79 31,67 40,53 C49,67 46,79 40,91Z" fill="#FF8C00" opacity="0.85"/>
+        <path d="M40,86 C37,77 35,68 40,58 C45,68 43,77 40,86Z" fill="#FFD060"/>
+        <path d="M40,79 C38,73 37,67 40,63 C43,67 42,73 40,79Z" fill="#FFEE99"/>
+        <rect x="26" y="94" width="28" height="7" rx="3.5" fill="#C8920A"/>
+        <path d="M20,101 L60,101 L56,117 L24,117Z" fill="#9B7010"/>
+        <rect x="18" y="115" width="44" height="9" rx="4.5" fill="#C8920A"/>
+      </svg>
+    </div>
+
+    <div class="hero-eyebrow">Barnsley's Favourite Café · Now Delivering</div>
+    <h1>Fresh Food,<br><em>Straight to Your Door</em></h1>
+    <p>Proper homemade food cooked fresh every morning on Carlton Road — full breakfasts, hearty main meals, and handmade sweets delivered to your door.</p>
+    <div class="hero-btns">
+      <a href="menu.html" class="btn-primary">Browse the Menu</a>
+      <a href="#delivery" class="btn-outline">Delivery Info</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-bar"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ══ STRIP ══ -->
+<div class="strip">
+  <div class="strip-item"><span class="strip-icon">🌾</span><span class="strip-label">Locally Sourced</span></div>
+  <div class="strip-item"><span class="strip-icon">🍳</span><span class="strip-label">Homemade Daily</span></div>
+  <div class="strip-item"><span class="strip-icon">🚗</span><span class="strip-label">Local Delivery</span></div>
+  <div class="strip-item"><span class="strip-icon">☕</span><span class="strip-label">Mon–Sun  8am – 4pm</span></div>
+</div>
+
+<!-- ══ MURAL WALL BANNER ══ -->
+<!--
+  DESIGN NOTE: This section shows as a decorative brick wall with lamp-light pools.
+  Replace the brick CSS background with the actual mural photograph from the Facebook header
+  for maximum impact — it will become the most distinctive part of the site.
+-->
+<div class="mural-banner">
+  <div class="mural-content">
+    <div class="mural-placeholder-label">📷 Your Wall Mural Photo Goes Here</div>
+    <p class="mural-quote">"Named after the lamp that lit the way<br>for <em>Barnsley's miners</em> —<br>we're here to light up your day."</p>
+    <p class="mural-attr">— The Davy Lamp, Carlton Road, Barnsley</p>
+  </div>
+</div>
+
+<!-- ══ POPULAR ══ -->
+<section class="sec popular">
+  <div class="inner">
+    <span class="eyebrow">From the Menu</span>
+    <div class="rule"></div>
+    <h2 class="sec-title">Customer Favourites</h2>
+    <p class="sec-sub">Fresh every morning. Here's what people keep coming back for.</p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-img">🍳</div>
+        <div class="card-body">
+          <h3 class="card-name">Large Breakfast</h3>
+          <p class="card-desc">2 bacon, 2 sausage, 2 eggs, beans, tomatoes, mushrooms, and two slices of toast. The full works.</p>
+          <div class="card-foot">
+            <span class="price">£12.15</span>
+            <a href="menu.html" class="btn-add">Order Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🥧</div>
+        <div class="card-body">
+          <h3 class="card-name">Steak &amp; Ale Pie</h3>
+          <p class="card-desc">Homemade steak and ale pie served with chips, gravy, and your choice of mushy or garden peas.</p>
+          <div class="card-foot">
+            <span class="price">£11.90</span>
+            <a href="menu.html" class="btn-add">Order Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🫕</div>
+        <div class="card-body">
+          <h3 class="card-name">Filled Yorkshire Pudding</h3>
+          <p class="card-desc">A Yorkshire classic — giant pud filled with mash, carrots, garden peas, meat of the day, and rich gravy.</p>
+          <div class="card-foot">
+            <span class="price">£9.50</span>
+            <a href="menu.html" class="btn-add">Order Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sec-cta"><a href="menu.html" class="btn-primary">View Full Menu</a></div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section class="sec about" id="about">
+  <div class="inner">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="eyebrow">Our Story</span>
+        <div class="rule"></div>
+        <h2 class="sec-title">Lit by Tradition,<br>Driven by Flavour</h2>
+        <p>Named after <strong>Sir Humphry Davy's miner's safety lamp</strong> — the light that guided Barnsley's pit workers through the dark — The Davy Lamp Café was founded in 2019 to bring the same warmth and reliability to the Carlton Road community.</p>
+        <p>Like the pit villages that built South Yorkshire's proud identity, we believe in <strong>honest, hearty food made with fresh, locally sourced ingredients</strong>. Every dish we serve is made fresh each morning.</p>
+        <p>Whether you're a miner's grandchild or a newcomer to Barnsley, you'll always find a warm welcome and a proper brew.</p>
+        <div class="about-stats">
+          <div><div class="stat-num">2019</div><div class="stat-lbl">Established</div></div>
+          <div><div class="stat-num">⭐ 5</div><div class="stat-lbl">Just Eat Rating</div></div>
+          <div><div class="stat-num">7 Days</div><div class="stat-lbl">A Week</div></div>
+        </div>
+      </div>
+      <div class="lamp-display">
+        <svg viewBox="0 0 80 132" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="9" r="6" fill="none" stroke="#E8A820" stroke-width="3.5"/>
+          <rect x="37" y="14" width="6" height="10" rx="2" fill="#9B7010"/>
+          <polygon points="30,24 50,24 46,37 34,37" fill="#B8841A"/>
+          <rect x="26" y="36" width="28" height="7" rx="3.5" fill="#C8920A"/>
+          <rect x="24" y="43" width="32" height="52" rx="3" fill="#FF7A00" opacity="0.22"/>
+          <rect x="24" y="43" width="32" height="52" rx="3" fill="none" stroke="#B8841A" stroke-width="2"/>
+          <line x1="24" y1="54" x2="56" y2="54" stroke="#B8841A" stroke-width="0.9"/>
+          <line x1="24" y1="65" x2="56" y2="65" stroke="#B8841A" stroke-width="0.9"/>
+          <line x1="24" y1="76" x2="56" y2="76" stroke="#B8841A" stroke-width="0.9"/>
+          <line x1="24" y1="87" x2="56" y2="87" stroke="#B8841A" stroke-width="0.9"/>
+          <line x1="32" y1="43" x2="32" y2="95" stroke="#B8841A" stroke-width="0.9"/>
+          <line x1="40" y1="43" x2="40" y2="95" stroke="#B8841A" stroke-width="0.9"/>
+          <line x1="48" y1="43" x2="48" y2="95" stroke="#B8841A" stroke-width="0.9"/>
+          <ellipse cx="40" cy="72" rx="13" ry="20" fill="#FF8C00" opacity="0.28"/>
+          <path d="M40,91 C34,79 31,67 40,53 C49,67 46,79 40,91Z" fill="#FF8C00" opacity="0.85"/>
+          <path d="M40,86 C37,77 35,68 40,58 C45,68 43,77 40,86Z" fill="#FFD060"/>
+          <path d="M40,79 C38,73 37,67 40,63 C43,67 42,73 40,79Z" fill="#FFEE99"/>
+          <rect x="26" y="94" width="28" height="7" rx="3.5" fill="#C8920A"/>
+          <path d="M20,101 L60,101 L56,117 L24,117Z" fill="#9B7010"/>
+          <rect x="18" y="115" width="44" height="9" rx="4.5" fill="#C8920A"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DELIVERY INFO ══ -->
+<section class="sec coal" id="delivery">
+  <div class="inner">
+    <span class="eyebrow">Delivery &amp; Ordering</span>
+    <div class="rule"></div>
+    <h2 class="sec-title">Everything You Need to Know</h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <span class="info-icon">🕐</span>
+        <h3>Opening Hours</h3>
+        <p><span class="hi">Monday – Sunday</span><br>8:00am – 4:00pm<br><br>Last food orders <span class="hi">3:00pm</span>.<br>Drinks &amp; cakes available until close.</p>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">📍</span>
+        <h3>Delivery Area</h3>
+        <p>We deliver locally from <span class="hi">Carlton Road, Barnsley S71</span>. Enter your postcode at checkout to confirm we can reach you.</p>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">💷</span>
+        <h3>Delivery Fees</h3>
+        <p><span class="hi">No minimum order</span><br>Delivery: <span class="hi">£4.59</span><br>Service fee: £0.99 – £2.99<br><br>Fees calculated at checkout.</p>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">⭐</span>
+        <h3>Our Rating</h3>
+        <p>Rated <span class="hi">5 stars</span> on Just Eat with over 106 reviews. We take pride in every order that leaves our kitchen.</p>
+      </div>
+    </div>
+    <div class="sec-cta" style="margin-top:3rem"><a href="menu.html" class="btn-primary">Start Your Order</a></div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer id="contact">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-name">The Davy Lamp Cafe</div>
+        <p>Serving fresh, homemade food to the Barnsley community since 2019. Named in honour of the light that guided miners through the darkness — we're here to brighten your day with great food, every day of the week.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Find Us</h4>
+        <address>Unit 1, 424 Carlton Road<br>Barnsley<br>S71 4HX</address>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>📞 01226 726362<br>✉ thedavylamp@gmail.com<br>📘 @davylampbarnsley</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 The Davy Lamp Cafe, Barnsley. All rights reserved.</span>
+      <span>Unit 1, 424 Carlton Road, S71 4HX</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

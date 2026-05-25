@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Davy Lamp Café — The Lamplight</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --white:    #FAFAF8;
+      --off:      #F2F0EB;
+      --border:   #E0DDD5;
+      --brass:    #9B7A30;
+      --brass-d:  #7A5E20;
+      --gold:     #C8920A;
+      --gold-l:   #E0AE30;
+      --ink:      #1A120A;
+      --ink-light:#4A3828;
+      --mid:      #8A7860;
+      --accent:   #C8920A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 64px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 56px;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none;
+    }
+    .nav-logo svg { width: 30px; height: auto; }
+    .nav-logo-text { font-family: 'Playfair Display', serif; }
+    .nav-logo-text .top { display: block; font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--brass); font-style: italic; }
+    .nav-logo-text .name { display: block; font-size: 1.05rem; font-weight: 700; color: var(--ink); line-height: 1.1; }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--ink-light); text-decoration: none; font-size: 0.88rem; letter-spacing: 0.04em; transition: color .2s; }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--ink);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      padding: 10px 22px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--ink-light); }
+    .nav-cta-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 64px;
+      min-height: 92vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+
+    .hero-left {
+      padding: 80px 64px 80px 56px;
+      display: flex; flex-direction: column;
+    }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow-line { width: 32px; height: 1px; background: var(--gold); }
+    .hero-eyebrow-text {
+      font-size: 0.75rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--brass);
+      font-weight: 700;
+    }
+
+    .hero-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.12;
+      margin-bottom: 24px;
+    }
+    .hero-h1 em { font-style: italic; color: var(--brass); }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--mid);
+      line-height: 1.75;
+      max-width: 440px;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--ink);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      padding: 14px 32px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-primary:hover { background: var(--brass-d); }
+    .btn-text {
+      color: var(--brass);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--brass);
+      padding-bottom: 2px;
+      transition: color .2s, border-color .2s;
+    }
+    .btn-text:hover { color: var(--gold); border-color: var(--gold); }
+
+    .hero-meta {
+      margin-top: 48px;
+      display: flex; flex-direction: column; gap: 10px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-meta-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.85rem;
+      color: var(--ink-light);
+    }
+    .hero-meta-item::before {
+      content: '';
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* Hero right — lamp visual panel */
+    .hero-right {
+      height: 100%;
+      min-height: 92vh;
+      position: relative;
+      overflow: hidden;
+      background: var(--off);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Subtle brick behind the lamp */
+    .hero-right-brick {
+      position: absolute; inset: 0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='140'%3E%3Crect width='400' height='140' fill='%23E8E4DC'/%3E%3Crect x='3' y='4' width='188' height='58' rx='1' fill='%23DDD8CE'/%3E%3Crect x='209' y='4' width='188' height='58' rx='1' fill='%23E2DDD4'/%3E%3Crect x='3' y='70' width='90' height='58' rx='1' fill='%23D8D4CA'/%3E%3Crect x='111' y='70' width='178' height='58' rx='1' fill='%23DDD9D0'/%3E%3Crect x='307' y='70' width='90' height='58' rx='1' fill='%23DAD6CC'/%3E%3C/svg%3E");
+      background-size: 400px 140px;
+      opacity: 0.6;
+    }
+
+    /* Glow halo centred on lamp */
+    .hero-right-glow {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,146,10,0.18) 0%, rgba(200,146,10,0.06) 50%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Brass accent bar */
+    .hero-right-bar {
+      position: absolute;
+      top: 0; bottom: 0; left: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    }
+
+    .hero-lamp-wrap {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 28px;
+    }
+    .hero-lamp-svg {
+      width: 130px;
+      filter: drop-shadow(0 4px 24px rgba(155,122,48,0.3));
+      animation: lamp-float 4s ease-in-out infinite;
+    }
+    @keyframes lamp-float {
+      0%, 100% { transform: translateY(0); filter: drop-shadow(0 4px 24px rgba(155,122,48,0.3)); }
+      50%       { transform: translateY(-8px); filter: drop-shadow(0 12px 32px rgba(155,122,48,0.45)); }
+    }
+
+    .hero-lamp-caption {
+      text-align: center;
+      background: rgba(250,250,248,0.9);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 14px 24px;
+    }
+    .hero-lamp-caption .cap-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--ink);
+      font-style: italic;
+    }
+    .hero-lamp-caption .cap-sub {
+      font-size: 0.75rem;
+      color: var(--mid);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .hero-right-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(250,250,248,0.85);
+      border-top: 1px solid var(--border);
+      padding: 10px 20px;
+      font-size: 0.75rem;
+      color: var(--mid);
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* ── MURAL PLACEHOLDER ── */
+    .mural-band {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--off);
+      padding: 40px 56px;
+      display: flex; align-items: center; gap: 32px;
+    }
+    .mural-band-icon { font-size: 2rem; flex-shrink: 0; }
+    .mural-band-text {}
+    .mural-band-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .mural-band-text p { font-size: 0.88rem; color: var(--mid); line-height: 1.5; }
+    .mural-band-border {
+      flex: 1;
+      height: 60px;
+      border: 2px dashed var(--border);
+      border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem;
+      color: var(--mid);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .feat-item {
+      padding: 32px 28px;
+      display: flex; flex-direction: column; gap: 8px;
+      border-right: 1px solid var(--border);
+    }
+    .feat-item:last-child { border-right: none; }
+    .feat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .feat-label { font-size: 0.82rem; color: var(--mid); letter-spacing: 0.04em; }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 88px 56px; }
+    .section-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--brass);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .section-h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.18;
+      margin-bottom: 16px;
+    }
+    .section-lead {
+      color: var(--mid);
+      font-size: 1rem;
+      line-height: 1.75;
+      max-width: 500px;
+      margin-bottom: 48px;
+      font-weight: 300;
+    }
+
+    /* ── POPULAR ── */
+    .popular { background: var(--white); }
+    .popular-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .popular-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      border: 1px solid var(--border);
+    }
+    .dish-card {
+      background: var(--white);
+      padding: 32px;
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      transition: background .2s;
+    }
+    .dish-card:last-child { border-right: none; }
+    .dish-card:hover { background: var(--off); }
+
+    .dish-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem;
+      color: var(--gold);
+      font-style: italic;
+      margin-bottom: 16px;
+      letter-spacing: 0.06em;
+    }
+    .dish-emoji { font-size: 2.4rem; margin-bottom: 16px; }
+    .dish-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .dish-desc {
+      font-size: 0.9rem;
+      color: var(--mid);
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+    .dish-footer { display: flex; align-items: center; justify-content: space-between; }
+    .dish-price {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .dish-price-label { font-size: 0.72rem; color: var(--mid); margin-bottom: 2px; letter-spacing: 0.06em; }
+    .dish-add {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--brass);
+      text-decoration: none;
+      border-bottom: 1px solid var(--brass);
+      padding-bottom: 1px;
+      transition: color .2s, border-color .2s;
+    }
+    .dish-add:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--off);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .about-left {}
+    .about-right {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      border: 1px solid var(--border);
+      background: var(--border);
+    }
+    .about-tile {
+      background: var(--white);
+      padding: 28px;
+    }
+    .about-tile-icon { font-size: 1.6rem; margin-bottom: 14px; }
+    .about-tile h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--ink);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .about-tile p { font-size: 0.88rem; color: var(--mid); line-height: 1.65; font-weight: 300; }
+    .about-quote {
+      margin-top: 32px;
+      padding: 20px 24px;
+      border-left: 3px solid var(--gold);
+    }
+    .about-quote blockquote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--ink-light);
+      line-height: 1.6;
+    }
+    .about-quote cite {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--mid);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 10px;
+      font-style: normal;
+    }
+
+    /* ── DELIVERY ── */
+    .delivery { background: var(--white); }
+    .delivery-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .delivery-left {}
+    .delivery-items {
+      display: flex; flex-direction: column; gap: 0;
+      border: 1px solid var(--border);
+    }
+    .del-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    .del-row:last-child { border-bottom: none; }
+    .del-row:hover { background: var(--off); }
+    .del-row-left { display: flex; flex-direction: column; gap: 3px; }
+    .del-row-label { font-size: 0.88rem; font-weight: 700; color: var(--ink); letter-spacing: 0.04em; }
+    .del-row-note { font-size: 0.8rem; color: var(--mid); }
+    .del-row-value { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--brass); font-weight: 700; }
+    .delivery-cta {
+      margin-top: 32px;
+    }
+    .delivery-cta a {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--ink);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      padding: 16px 36px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .delivery-cta a:hover { background: var(--brass-d); }
+    .delivery-cta a span { font-size: 1.1rem; }
+
+    /* ── CONTACT STRIP ── */
+    .contact-strip {
+      background: var(--ink);
+      color: var(--white);
+      padding: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .contact-strip-left {}
+    .contact-strip h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .contact-strip p { color: var(--mid); font-weight: 300; }
+    .contact-details {
+      display: flex; gap: 40px; flex-wrap: wrap;
+    }
+    .contact-item { display: flex; flex-direction: column; gap: 4px; }
+    .contact-item-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+    .contact-item-val { font-size: 1rem; color: var(--white); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--off);
+      border-top: 1px solid var(--border);
+      padding: 32px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-left { font-size: 0.82rem; color: var(--mid); }
+    .footer-left strong {
+      font-family: 'Playfair Display', serif;
+      color: var(--ink);
+      font-size: 0.92rem;
+    }
+    .footer-note {
+      font-style: italic;
+      font-size: 0.8rem;
+      color: var(--brass);
+    }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 0.82rem; color: var(--mid); text-decoration: none; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { min-height: 360px; }
+      .hero-left { padding: 60px 24px; }
+      .features { grid-template-columns: repeat(2, 1fr); }
+      .feat-item:nth-child(2) { border-right: none; }
+      .popular-grid { grid-template-columns: 1fr; }
+      .dish-card { border-right: none; border-bottom: 1px solid var(--border); }
+      .about-inner { grid-template-columns: 1fr; gap: 40px; }
+      .about-right { grid-template-columns: 1fr; }
+      .delivery-inner { grid-template-columns: 1fr; gap: 48px; }
+      .contact-strip { padding: 40px 24px; }
+      footer { padding: 24px 24px; flex-direction: column; align-items: flex-start; gap: 12px; }
+      section { padding: 60px 24px; }
+      .mural-band { padding: 28px 24px; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <!-- Davy Lamp SVG — clean brass variant -->
+    <svg viewBox="0 0 80 132" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40 2 C32 2 26 8 26 16 L26 22" stroke="#9B7A30" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="40" cy="24" rx="14" ry="5" fill="#9B7A30"/>
+      <rect x="26" y="22" width="28" height="8" rx="2" fill="#9B7A30"/>
+      <rect x="23" y="28" width="34" height="5" rx="2" fill="#7A5E20"/>
+      <rect x="25" y="33" width="30" height="52" rx="2" fill="#F8E8A0" opacity="0.65"/>
+      <ellipse cx="40" cy="54" rx="7" ry="12" fill="#C8920A" opacity="0.88"/>
+      <ellipse cx="40" cy="50" rx="4" ry="7" fill="#E0C040" opacity="0.9"/>
+      <line x1="25" y1="44" x2="55" y2="44" stroke="#7A5E20" stroke-width="1.5"/>
+      <line x1="25" y1="64" x2="55" y2="64" stroke="#7A5E20" stroke-width="1.5"/>
+      <rect x="23" y="85" width="34" height="7" rx="2" fill="#7A5E20"/>
+      <ellipse cx="40" cy="94" rx="17" ry="6" fill="#5E4818"/>
+      <rect x="28" y="98" width="24" height="14" rx="2" fill="#9B7A30"/>
+      <ellipse cx="40" cy="112" rx="20" ry="7" fill="#7A5E20"/>
+      <path d="M55 70 Q72 70 72 84 Q72 98 55 98" stroke="#9B7A30" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="nav-logo-text">
+      <span class="top">Barnsley, since always</span>
+      <span class="name">The Davy Lamp Café</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Menu</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <a href="../menu.html" class="nav-cta">
+    <span class="nav-cta-dot"></span>
+    Order Now
+  </a>
+</nav>
+
+<!-- HERO — two column split -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">Delivery &amp; Takeaway · Barnsley</span>
+    </div>
+
+    <h1 class="hero-h1">
+      Proper Yorkshire Food,<br>
+      <em>Delivered</em> to<br>
+      Your Door.
+    </h1>
+
+    <p class="hero-sub">
+      Real breakfasts. Homemade pies. Giant Yorkshire puds. Everything The Davy Lamp Café is famous for — now available for delivery across Barnsley.
+    </p>
+
+    <div class="hero-actions">
+      <a href="../menu.html" class="btn-primary">See the Full Menu</a>
+      <a href="#popular" class="btn-text">What's popular →</a>
+    </div>
+
+    <div class="hero-meta">
+      <div class="hero-meta-item">Open Monday to Sunday, 8am–4pm</div>
+      <div class="hero-meta-item">Delivery £4.59 &nbsp;·&nbsp; No minimum order</div>
+      <div class="hero-meta-item">Unit 1, 424 Carlton Road, Barnsley S71 4HX</div>
+    </div>
+  </div>
+
+  <!-- Right panel — lamp on subtle brick -->
+  <div class="hero-right">
+    <div class="hero-right-brick"></div>
+    <div class="hero-right-glow"></div>
+    <div class="hero-right-bar"></div>
+
+    <div class="hero-lamp-wrap">
+      <svg class="hero-lamp-svg" viewBox="0 0 80 132" xmlns="http://www.w3.org/2000/svg">
+        <!-- Hanging hook -->
+        <path d="M40 2 C32 2 26 8 26 16 L26 22" stroke="#9B7A30" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- Top ring -->
+        <ellipse cx="40" cy="24" rx="14" ry="5" fill="#B89040"/>
+        <rect x="26" y="22" width="28" height="8" rx="2" fill="#B89040"/>
+        <!-- Font ring -->
+        <rect x="23" y="28" width="34" height="5" rx="2" fill="#7A5E20"/>
+        <!-- Glass body -->
+        <rect x="25" y="33" width="30" height="52" rx="3" fill="#F8F0C0" opacity="0.55"/>
+        <rect x="25" y="33" width="30" height="52" rx="3" fill="none" stroke="#9B7A30" stroke-width="1"/>
+        <!-- Flame glow -->
+        <ellipse cx="40" cy="59" rx="13" ry="13" fill="#E0AE30" opacity="0.2"/>
+        <!-- Flame -->
+        <ellipse cx="40" cy="54" rx="7" ry="12" fill="#C8920A" opacity="0.85"/>
+        <ellipse cx="40" cy="50" rx="4" ry="7" fill="#E0C040" opacity="0.95"/>
+        <ellipse cx="40" cy="46" rx="2" ry="4" fill="#F0E080"/>
+        <!-- Gauze bands -->
+        <line x1="25" y1="44" x2="55" y2="44" stroke="#7A5E20" stroke-width="1.5"/>
+        <line x1="25" y1="64" x2="55" y2="64" stroke="#7A5E20" stroke-width="1.5"/>
+        <!-- Wick tube -->
+        <rect x="37" y="78" width="6" height="10" rx="1" fill="#7A5E20"/>
+        <!-- Bottom ring -->
+        <rect x="23" y="85" width="34" height="7" rx="2" fill="#7A5E20"/>
+        <ellipse cx="40" cy="94" rx="17" ry="6" fill="#5E4818"/>
+        <!-- Oil reservoir -->
+        <rect x="28" y="98" width="24" height="14" rx="3" fill="#B89040"/>
+        <ellipse cx="40" cy="112" rx="20" ry="7" fill="#9B7A30"/>
+        <!-- Handle -->
+        <path d="M55 70 Q76 70 76 84 Q76 98 55 98" stroke="#9B7A30" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </svg>
+
+      <div class="hero-lamp-caption">
+        <div class="cap-name">The Davy Safety Lamp</div>
+        <div class="cap-sub">Barnsley's guiding light since 1815</div>
+      </div>
+    </div>
+
+    <!-- Mural placeholder label -->
+    <div class="hero-right-label">📷 This panel could feature the café's wall mural photograph</div>
+  </div>
+</div>
+
+<!-- MURAL BAND -->
+<div class="mural-band">
+  <div class="mural-band-icon">🧱</div>
+  <div class="mural-band-text">
+    <h3>Your Wall Mural — Full Banner</h3>
+    <p>The brick mural from the café's Facebook header could sit here as a full-width feature image — or as a panel replacing the right-hand lamp column above.</p>
+  </div>
+  <div class="mural-band-border">Photo Placeholder</div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="features">
+  <div class="feat-item">
+    <div class="feat-num">8am</div>
+    <div class="feat-label">Opening every day of the week</div>
+  </div>
+  <div class="feat-item">
+    <div class="feat-num">£0</div>
+    <div class="feat-label">Minimum order — order anything</div>
+  </div>
+  <div class="feat-item">
+    <div class="feat-num">9+</div>
+    <div class="feat-label">Menu categories — breakfast to sweet</div>
+  </div>
+  <div class="feat-item">
+    <div class="feat-num">★ 4.7</div>
+    <div class="feat-label">Rating on Just Eat</div>
+  </div>
+</div>
+
+<!-- POPULAR -->
+<section class="popular" id="popular">
+  <div class="popular-layout">
+    <p class="section-tag">Customer Favourites</p>
+    <h2 class="section-h2" style="margin-bottom: 40px;">What Comes Out of<br>Our Kitchen Every Day</h2>
+    <div class="popular-grid">
+      <div class="dish-card">
+        <div class="dish-number">No. 01</div>
+        <div class="dish-emoji">🍳</div>
+        <div class="dish-name">Large Breakfast</div>
+        <p class="dish-desc">The full Barnsley send-off. Bacon, sausage, eggs your way, black pudding, baked beans, hash brown, toast. The works, done properly.</p>
+        <div class="dish-footer">
+          <div>
+            <div class="dish-price-label">FROM</div>
+            <div class="dish-price">£12.15</div>
+          </div>
+          <a href="../menu.html" class="dish-add">Order this →</a>
+        </div>
+      </div>
+      <div class="dish-card">
+        <div class="dish-number">No. 02</div>
+        <div class="dish-emoji">🥧</div>
+        <div class="dish-name">Steak &amp; Ale Pie</div>
+        <p class="dish-desc">Slow-braised steak in rich Yorkshire ale gravy inside a proper shortcrust case. Served with mashed potato and garden peas.</p>
+        <div class="dish-footer">
+          <div>
+            <div class="dish-price-label">FROM</div>
+            <div class="dish-price">£11.90</div>
+          </div>
+          <a href="../menu.html" class="dish-add">Order this →</a>
+        </div>
+      </div>
+      <div class="dish-card">
+        <div class="dish-number">No. 03</div>
+        <div class="dish-emoji">🫓</div>
+        <div class="dish-name">Filled Yorkshire Pud</div>
+        <p class="dish-desc">A baked Yorkshire pudding big enough to need two hands. Filled with roast beef, roast potatoes, veg and proper gravy.</p>
+        <div class="dish-footer">
+          <div>
+            <div class="dish-price-label">FROM</div>
+            <div class="dish-price">£9.50</div>
+          </div>
+          <a href="../menu.html" class="dish-add">Order this →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="about-inner">
+    <div class="about-left">
+      <p class="section-tag">Our Story</p>
+      <h2 class="section-h2">Named After the Lamp That Lit<br>the Way</h2>
+      <p class="section-lead">The Davy lamp was a miner's constant companion — its amber glow and protective mesh meant safety in the dark. At The Davy Lamp Café on Carlton Road, we've kept that spirit alive.</p>
+      <div class="about-quote">
+        <blockquote>"Good food, a warm room, and a familiar face. That's what we're about."</blockquote>
+        <cite>The Davy Lamp Café, Barnsley</cite>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="about-tile">
+        <div class="about-tile-icon">⛏️</div>
+        <h3>The Heritage</h3>
+        <p>Sir Humphry Davy invented the safety lamp in 1815. It became a lifeline in Yorkshire's pits — and a symbol of the community that built this town.</p>
+      </div>
+      <div class="about-tile">
+        <div class="about-tile-icon">🍳</div>
+        <h3>The Kitchen</h3>
+        <p>Everything's cooked fresh to order. We don't do shortcuts or heat lamps. If it takes a few extra minutes, it's because yours is being done right.</p>
+      </div>
+      <div class="about-tile">
+        <div class="about-tile-icon">📍</div>
+        <h3>The Location</h3>
+        <p>Unit 1, 424 Carlton Road — working-class Barnsley, the way it always was. Locals, families, workers. Everyone welcome.</p>
+      </div>
+      <div class="about-tile">
+        <div class="about-tile-icon">🕐</div>
+        <h3>The Hours</h3>
+        <p>Open seven days a week, 8am to 4pm. Breakfast, brunch, lunch — whatever you're after, we're here when you need us.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERY -->
+<section class="delivery">
+  <div class="delivery-inner">
+    <div class="delivery-left">
+      <p class="section-tag">Getting it to You</p>
+      <h2 class="section-h2">Delivery That's Straight<br>to the Point</h2>
+      <p class="section-lead">No minimum order, no fuss. Order what you want, when you want it, and we'll get it to your door while it's still proper hot.</p>
+      <div class="delivery-cta">
+        <a href="../menu.html">
+          <span>🛒</span>
+          Start Your Order
+        </a>
+      </div>
+    </div>
+    <div class="delivery-items">
+      <div class="del-row">
+        <div class="del-row-left">
+          <span class="del-row-label">Minimum Order</span>
+          <span class="del-row-note">Order as little or as much as you like</span>
+        </div>
+        <span class="del-row-value">None</span>
+      </div>
+      <div class="del-row">
+        <div class="del-row-left">
+          <span class="del-row-label">Delivery Fee</span>
+          <span class="del-row-note">Flat rate to your door</span>
+        </div>
+        <span class="del-row-value">£4.59</span>
+      </div>
+      <div class="del-row">
+        <div class="del-row-left">
+          <span class="del-row-label">Service Fee</span>
+          <span class="del-row-note">Platform charge applied at checkout</span>
+        </div>
+        <span class="del-row-value">£0.99–£2.99</span>
+      </div>
+      <div class="del-row">
+        <div class="del-row-left">
+          <span class="del-row-label">Opening Hours</span>
+          <span class="del-row-note">Seven days a week, every week</span>
+        </div>
+        <span class="del-row-value">8am–4pm</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT STRIP -->
+<div class="contact-strip">
+  <div class="contact-strip-left">
+    <h2>Find Us or Call Us</h2>
+    <p>We're always happy to hear from you.</p>
+  </div>
+  <div class="contact-details">
+    <div class="contact-item">
+      <span class="contact-item-label">Address</span>
+      <span class="contact-item-val">Unit 1, 424 Carlton Road, Barnsley S71 4HX</span>
+    </div>
+    <div class="contact-item">
+      <span class="contact-item-label">Phone</span>
+      <span class="contact-item-val">01226 726362</span>
+    </div>
+    <div class="contact-item">
+      <span class="contact-item-label">Email</span>
+      <span class="contact-item-val">thedavylamp@gmail.com</span>
+    </div>
+    <div class="contact-item">
+      <span class="contact-item-label">Hours</span>
+      <span class="contact-item-val">Mon–Sun · 8am–4pm</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <strong>The Davy Lamp Café</strong><br>
+    &copy; 2025 · Barnsley, S71 4HX
+  </div>
+  <span class="footer-note">Style C — "The Lamplight" prototype</span>
+  <div class="footer-links">
+    <a href="../menu.html">Menu</a>
+    <a href="#">Facebook</a>
+    <a href="#">Just Eat</a>
+    <a href="../styles.html">← All Styles</a>
+  </div>
+</footer>
+
+</body>
+</html>
