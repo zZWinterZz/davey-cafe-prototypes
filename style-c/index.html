@@ -519,7 +519,7 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       nav { padding: 0 20px; }
-      .nav-links { display: none; }
+      .nav-links { display: none; } .nav-cta { display: none; }
       .hero { grid-template-columns: 1fr; }
       .hero-right { min-height: 360px; }
       .hero-left { padding: 60px 24px; }
@@ -535,6 +535,38 @@
       section { padding: 60px 24px; }
       .mural-band { padding: 28px 24px; flex-direction: column; }
     }
+
+    /* -- MOBILE NAV -- */
+    .nav-burger {
+      display: none; flex-direction: column; justify-content: space-between;
+      width: 26px; height: 18px; background: none; border: none;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+    }
+    .nav-burger span {
+      display: block; width: 100%; height: 2px;
+      background: #1A120A; border-radius: 1px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .nav-burger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .nav-mobile {
+      display: none; position: fixed; top: 64px; left: 0; right: 0;
+      background: #FAFAF6; border-bottom: 1px solid rgba(0,0,0,0.08); z-index: 99;
+    }
+    .nav-mobile.open { display: block; }
+    .nav-mobile a {
+      display: block; padding: 16px 24px; font-size: 0.95rem;
+      color: #3A2818; text-decoration: none;
+      border-bottom: 1px solid rgba(0,0,0,0.06); transition: background 0.15s;
+    }
+    .nav-mobile a:hover { background: rgba(155,120,48,0.06); }
+    .nav-mobile .mob-cta {
+      background: #1A120A; color: #FAFAF6;
+      font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      border-bottom: none; text-align: center;
+    }
+    @media (max-width: 900px) { .nav-burger { display: flex; } }
   </style>
 </head>
 <body>
@@ -599,7 +631,15 @@
     <span class="nav-cta-dot"></span>
     Order Now
   </a>
+  <button class="nav-burger" aria-label="Open menu" id="nav-burger"><span></span><span></span><span></span></button>
 </nav>
+<div class="nav-mobile" id="nav-mobile">
+  <a href="../">&larr; All Styles</a>
+  <a href="../menu.html">Menu</a>
+  <a href="#about">About</a>
+  <a href="#delivery">Delivery</a>
+  <a href="../menu.html" class="mob-cta">Order Now</a>
+</div>
 
 <!-- HERO — two column split -->
 <div class="hero">
@@ -877,5 +917,20 @@
   </div>
 </footer>
 
+
+<script>
+  var burger = document.getElementById('nav-burger');
+  var mob    = document.getElementById('nav-mobile');
+  burger.addEventListener('click', function() {
+    burger.classList.toggle('open');
+    mob.classList.toggle('open');
+  });
+  mob.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      burger.classList.remove('open');
+      mob.classList.remove('open');
+    });
+  });
+</script>
 </body>
 </html>

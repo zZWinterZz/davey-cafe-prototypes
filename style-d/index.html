@@ -385,11 +385,43 @@
 
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
-      .nav-links { display: none; }
+      .nav-links { display: none; } .nav-cta { display: none; }
       .about-inner { grid-template-columns: 1fr; gap: 40px; }
       .footer-inner { grid-template-columns: 1fr; gap: 28px; }
       section { padding: 60px 20px; }
     }
+
+    /* -- MOBILE NAV -- */
+    .nav-burger {
+      display: none; flex-direction: column; justify-content: space-between;
+      width: 26px; height: 18px; background: none; border: none;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+    }
+    .nav-burger span {
+      display: block; width: 100%; height: 2px;
+      background: #C4A030; border-radius: 1px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .nav-burger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .nav-mobile {
+      display: none; position: fixed; top: 70px; left: 0; right: 0;
+      background: #1E0E04; border-bottom: 2px solid #9B7820; z-index: 99;
+    }
+    .nav-mobile.open { display: block; }
+    .nav-mobile a {
+      display: block; padding: 16px 24px; font-size: 0.95rem;
+      color: #F0E6CC; text-decoration: none;
+      border-bottom: 1px solid rgba(155,120,32,0.2); transition: background 0.15s;
+    }
+    .nav-mobile a:hover { background: rgba(155,120,32,0.08); }
+    .nav-mobile .mob-cta {
+      background: #8B3010; color: #F0E6CC;
+      font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      border-bottom: none; text-align: center;
+    }
+    @media (max-width: 768px) { .nav-burger { display: flex; } }
   </style>
 </head>
 <body>
@@ -438,7 +470,15 @@
     <li><a href="#delivery">Delivery</a></li>
   </ul>
   <a href="../menu.html" class="nav-cta">Order Now</a>
+  <button class="nav-burger" aria-label="Open menu" id="nav-burger"><span></span><span></span><span></span></button>
 </nav>
+<div class="nav-mobile" id="nav-mobile">
+  <a href="../">&larr; All Styles</a>
+  <a href="../menu.html">Menu</a>
+  <a href="#about">Our Story</a>
+  <a href="#delivery">Delivery</a>
+  <a href="../menu.html" class="mob-cta">Order Now</a>
+</div>
 
 <section class="hero">
   <div class="hero-bg"></div>
@@ -627,5 +667,20 @@
   </div>
 </footer>
 
+
+<script>
+  var burger = document.getElementById('nav-burger');
+  var mob    = document.getElementById('nav-mobile');
+  burger.addEventListener('click', function() {
+    burger.classList.toggle('open');
+    mob.classList.toggle('open');
+  });
+  mob.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      burger.classList.remove('open');
+      mob.classList.remove('open');
+    });
+  });
+</script>
 </body>
 </html>

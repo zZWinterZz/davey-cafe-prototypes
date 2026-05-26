@@ -235,6 +235,38 @@
     .footer-col h4 { font-size:0.7rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:0.9rem; }
     .footer-col p, .footer-col address { color:var(--muted); font-size:0.86rem; line-height:2; font-style:normal; }
     .footer-bottom { border-top:1px solid var(--border); padding-top:1.5rem; display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:0.78rem; flex-wrap:wrap; gap:0.75rem; }
+
+    /* -- MOBILE NAV -- */
+    .nav-burger {
+      display: none; flex-direction: column; justify-content: space-between;
+      width: 26px; height: 18px; background: none; border: none;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+    }
+    .nav-burger span {
+      display: block; width: 100%; height: 2px;
+      background: #E8A820; border-radius: 1px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .nav-burger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .nav-mobile {
+      display: none; position: fixed; top: 68px; left: 0; right: 0;
+      background: #0E0704; border-bottom: 1px solid rgba(200,130,10,0.2); z-index: 99;
+    }
+    .nav-mobile.open { display: block; }
+    .nav-mobile a {
+      display: block; padding: 16px 24px; font-size: 0.95rem;
+      color: #E0D0B8; text-decoration: none;
+      border-bottom: 1px solid rgba(200,130,10,0.12); transition: background 0.15s;
+    }
+    .nav-mobile a:hover { background: rgba(200,130,10,0.06); }
+    .nav-mobile .mob-cta {
+      background: #C8820A; color: #060302;
+      font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      border-bottom: none; text-align: center;
+    }
+    @media (max-width: 768px) { .nav-burger { display: flex; } }
   </style>
 </head>
 <body>
@@ -295,7 +327,15 @@
     <li><a href="#delivery">Delivery</a></li>
     <li><a href="../menu.html" class="nav-cta">Order Now</a></li>
   </ul>
+  <button class="nav-burger" aria-label="Open menu" id="nav-burger"><span></span><span></span><span></span></button>
 </nav>
+<div class="nav-mobile" id="nav-mobile">
+  <a href="../">&larr; All Styles</a>
+  <a href="../menu.html">Menu</a>
+  <a href="#about">Our Story</a>
+  <a href="#delivery">Delivery</a>
+  <a href="../menu.html" class="mob-cta">Order Now</a>
+</div>
 
 <!-- ══ HERO — Brick wall with lamp glow ══ -->
 <section class="hero">
@@ -537,5 +577,20 @@
   </div>
 </footer>
 
+
+<script>
+  var burger = document.getElementById('nav-burger');
+  var mob    = document.getElementById('nav-mobile');
+  burger.addEventListener('click', function() {
+    burger.classList.toggle('open');
+    mob.classList.toggle('open');
+  });
+  mob.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      burger.classList.remove('open');
+      mob.classList.remove('open');
+    });
+  });
+</script>
 </body>
 </html>
