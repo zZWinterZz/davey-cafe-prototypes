@@ -245,33 +245,9 @@
       font-style: italic;
     }
 
-    /* ── MURAL PLACEHOLDER ── */
-    .mural-band {
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--off);
-      padding: 40px 56px;
-      display: flex; align-items: center; gap: 32px;
-    }
-    .mural-band-icon { font-size: 2rem; flex-shrink: 0; }
-    .mural-band-text {}
-    .mural-band-text h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      color: var(--ink);
-      margin-bottom: 4px;
-    }
-    .mural-band-text p { font-size: 0.88rem; color: var(--mid); line-height: 1.5; }
-    .mural-band-border {
-      flex: 1;
-      height: 60px;
-      border: 2px dashed var(--border);
-      border-radius: 3px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.78rem;
-      color: var(--mid);
-      letter-spacing: 0.08em;
-    }
+    /* ── MURAL ── */
+    .mural-band { overflow: hidden; line-height: 0; }
+    .mural-img { width: 100%; display: block; max-height: 380px; object-fit: cover; object-position: center 20%; }
 
     /* ── FEATURES ── */
     .features {
@@ -699,19 +675,12 @@
       </div>
     </div>
 
-    <!-- Mural placeholder label -->
-    <div class="hero-right-label">📷 This panel could feature the café's wall mural photograph</div>
   </div>
 </div>
 
 <!-- MURAL BAND -->
 <div class="mural-band">
-  <div class="mural-band-icon">🧱</div>
-  <div class="mural-band-text">
-    <h3>Your Wall Mural — Full Banner</h3>
-    <p>The brick mural from the café's Facebook header could sit here as a full-width feature image — or as a panel replacing the right-hand lamp column above.</p>
-  </div>
-  <div class="mural-band-border">Photo Placeholder</div>
+  <img src="../assets/mural.jpg" alt="The Davy Lamp Café wall mural — Barnsley colliery scene" class="mural-img">
 </div>
 
 <!-- STATS STRIP -->

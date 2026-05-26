@@ -196,28 +196,8 @@
     .hero-notice span { margin: 0 10px; }
 
     /* ── MURAL ── */
-    .mural-banner {
-      background: var(--paper-3);
-      border-top: 3px double var(--gold);
-      border-bottom: 3px double var(--gold);
-      padding: 44px 40px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .mural-inner {
-      max-width: 860px; width: 100%;
-      border: 1px dashed var(--sepia);
-      padding: 36px;
-      text-align: center;
-    }
-    .mural-inner .ornament { margin-bottom: 10px; }
-    .mural-label {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      color: var(--rust);
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-    .mural-note { font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.9rem; color: var(--sepia); }
+    .mural-banner { overflow: hidden; line-height: 0; }
+    .mural-img { width: 100%; display: block; max-height: 380px; object-fit: cover; object-position: center 20%; }
 
     /* ── SECTION SHARED ── */
     section { padding: 80px 48px; position: relative; }
@@ -510,11 +490,7 @@
 </section>
 
 <div class="mural-banner">
-  <div class="mural-inner">
-    <div class="ornament">— 📷 —</div>
-    <p class="mural-label">Your Wall Mural — Full Width Here</p>
-    <p class="mural-note">The aged brick and sepia tones of this style would sit beautifully alongside the café's real mural photograph.</p>
-  </div>
+  <img src="../assets/mural.jpg" alt="The Davy Lamp Café wall mural — Barnsley colliery scene" class="mural-img">
 </div>
 
 <section class="popular" id="popular">

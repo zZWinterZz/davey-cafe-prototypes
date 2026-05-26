@@ -188,29 +188,8 @@
     }
 
     /* ── MURAL BANNER ── */
-    .mural-banner {
-      background: var(--parchment-2);
-      border-top: 3px solid var(--gold);
-      border-bottom: 3px solid var(--gold);
-      padding: 48px 40px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .mural-inner {
-      max-width: 900px; width: 100%;
-      border: 2px dashed var(--warm-grey);
-      border-radius: 4px;
-      padding: 40px;
-      text-align: center;
-    }
-    .mural-icon { font-size: 2.4rem; margin-bottom: 12px; }
-    .mural-label {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.15rem;
-      color: var(--terracotta);
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .mural-note { color: var(--warm-grey); font-size: 0.88rem; }
+    .mural-banner { overflow: hidden; line-height: 0; }
+    .mural-img { width: 100%; display: block; max-height: 380px; object-fit: cover; object-position: center 20%; }
 
     /* ── FEATURES STRIP ── */
     .features-strip {
@@ -573,12 +552,7 @@
 
 <!-- MURAL BANNER -->
 <div class="mural-banner">
-  <div class="mural-inner">
-    <!-- DESIGN NOTE: Replace with the actual wall mural photograph from the Facebook header -->
-    <div class="mural-icon">📷</div>
-    <p class="mural-label">Your Wall Mural — Full Width Here</p>
-    <p class="mural-note">The terracotta warm tones of this style would complement the brick mural beautifully as a full-bleed banner image.</p>
-  </div>
+  <img src="../assets/mural.jpg" alt="The Davy Lamp Café wall mural — Barnsley colliery scene" class="mural-img">
 </div>
 
 <!-- FEATURES STRIP -->

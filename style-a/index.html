@@ -160,41 +160,8 @@
       This section is a placeholder for the actual wall mural photograph from the Facebook header.
       In production, replace the background-color with background-image: url('your-mural-photo.jpg')
     */
-    .mural-banner {
-      position: relative; height: 420px; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-      background-color: #3A1008;
-      background-image:
-        url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='140'><rect width='400' height='140' fill='%231A0802'/><rect x='3' y='4' width='188' height='58' rx='1' fill='%23702010'/><rect x='209' y='4' width='188' height='58' rx='1' fill='%23601808'/><rect x='3' y='70' width='90' height='58' rx='1' fill='%235C1A07'/><rect x='111' y='70' width='178' height='58' rx='1' fill='%23701E0C'/><rect x='307' y='70' width='90' height='58' rx='1' fill='%23641C08'/></svg>");
-      background-size: 400px 140px;
-    }
-    /* Warm lamp-light pools across the wall */
-    .mural-banner::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 40% 60% at 25% 50%, rgba(220,140,10,0.22) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 60% at 75% 50%, rgba(200,120,8,0.18) 0%, transparent 65%),
-        linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.5) 100%);
-    }
-    .mural-content {
-      position: relative; z-index: 1; text-align: center;
-      padding: 2rem;
-    }
-    .mural-placeholder-label {
-      display: inline-block;
-      background: rgba(200,130,10,0.15); border: 1px dashed rgba(200,130,10,0.5);
-      color: var(--amber); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
-      padding: 0.4rem 1rem; border-radius: 2px; margin-bottom: 1.5rem;
-    }
-    .mural-quote {
-      font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 4vw, 2.4rem);
-      font-style: italic; color: var(--white); line-height: 1.3;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.7);
-      max-width: 700px;
-    }
-    .mural-quote em { color: var(--amber); }
-    .mural-attr { margin-top: 1rem; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.08em; }
+    .mural-banner { overflow: hidden; line-height: 0; }
+    .mural-img { width: 100%; display: block; max-height: 380px; object-fit: cover; object-position: center 20%; }
 
     /* ═══ SECTIONS ═══ */
     .sec { padding:5.5rem 2rem; }
@@ -322,7 +289,7 @@
     </div>
   </a>
   <ul class="nav-links">
-    <li><a href="../">Home</a></li>
+    <li><a href="../">← All Styles</a></li>
     <li><a href="../menu.html">Menu</a></li>
     <li><a href="#about">Our Story</a></li>
     <li><a href="#delivery">Delivery</a></li>
@@ -400,17 +367,8 @@
 </div>
 
 <!-- ══ MURAL WALL BANNER ══ -->
-<!--
-  DESIGN NOTE: This section shows as a decorative brick wall with lamp-light pools.
-  Replace the brick CSS background with the actual mural photograph from the Facebook header
-  for maximum impact — it will become the most distinctive part of the site.
--->
 <div class="mural-banner">
-  <div class="mural-content">
-    <div class="mural-placeholder-label">📷 Your Wall Mural Photo Goes Here</div>
-    <p class="mural-quote">"Named after the lamp that lit the way<br>for <em>Barnsley's miners</em> —<br>we're here to light up your day."</p>
-    <p class="mural-attr">— The Davy Lamp, Carlton Road, Barnsley</p>
-  </div>
+  <img src="../assets/mural.jpg" alt="The Davy Lamp Café wall mural — Barnsley colliery scene" class="mural-img">
 </div>
 
 <!-- ══ POPULAR ══ -->

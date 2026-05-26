@@ -183,22 +183,8 @@
     }
 
     /* ── MURAL ── */
-    .mural-banner {
-      background: var(--dark);
-      border-top: 2px solid var(--orange);
-      border-bottom: 2px solid var(--orange);
-      padding: 40px 64px;
-      display: flex; align-items: center; gap: 32px;
-    }
-    .mural-icon { font-size: 2rem; color: var(--orange); flex-shrink: 0; }
-    .mural-text h3 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--white); margin-bottom: 4px; }
-    .mural-text p { font-size: 0.88rem; color: var(--mid); }
-    .mural-placeholder {
-      flex: 1; height: 56px;
-      border: 2px dashed rgba(200,87,42,0.35);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.78rem; color: var(--mid); letter-spacing: 0.1em;
-    }
+    .mural-banner { overflow: hidden; line-height: 0; }
+    .mural-img { width: 100%; display: block; max-height: 380px; object-fit: cover; object-position: center 20%; }
 
     /* ── FEATURES ── */
     .features {
@@ -401,12 +387,7 @@
 </section>
 
 <div class="mural-banner">
-  <div class="mural-icon">📷</div>
-  <div class="mural-text">
-    <h3>Wall Mural Photo</h3>
-    <p>Replace this strip with the café's Facebook header mural — the orange would complement the brick beautifully.</p>
-  </div>
-  <div class="mural-placeholder">Photo Placeholder</div>
+  <img src="../assets/mural.jpg" alt="The Davy Lamp Café wall mural — Barnsley colliery scene" class="mural-img">
 </div>
 
 <div class="features">
